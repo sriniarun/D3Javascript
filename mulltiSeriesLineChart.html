@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Series Line Chart</title>
+</head>
+<body>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script src="js/scriptFord3.js"></script>
+<script>
+var request = new XMLHttpRequest();
+request.open("GET", "js/urban_population.json", false);
+request.send(null);
+var jsonPts = JSON.parse(request.responseText);
+var urbanPts = [];
+var ruralPts = [];
+for(var i=0;i<jsonPts.length;i++) {
+  if(jsonPts[i].IndicatorCode=="SP.RUR.TOTL.ZS") {
+    ruralPts.push(jsonPts[i]);
+  } else {
+    urbanPts.push(jsonPts[i]);
+  }
+}
+multiLine(urbanPts, ruralPts);
+</script>
+</body>
+<h2 style="padding-left: 10%">Multi-series line chart for Urban population and Rural population in India over 1960 - 2015</h2>
+</html>

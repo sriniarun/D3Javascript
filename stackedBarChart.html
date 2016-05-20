@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Asia Urban/Rural Population</title>
+</head>
+<body>
+<script src="http://d3js.org/d3.v2.js"></script>
+<script src="js/scriptFord3.js"></script>
+<script>
+//asian_ur.json
+
+var request = new XMLHttpRequest();
+request.open("GET", "js/asian_rural_population.json", false);
+request.send(null);
+var jsonRects = JSON.parse(request.responseText);
+
+var ASIAN_COUNTRIES = ["Afghanistan", "Bahrain", "Bangladesh", "Bhutan", "Myanmar", "Cambodia", "China", "India", "Indonesia", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Nepal",
+"Oman", "Pakistan", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "Sri Lanka", "Syrian Arab Republic", "Tajikistan", "Thailand", "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen"];
+
+var data = [], min = Number.MAX_VALUE, max = Number.MIN_VALUE;
+
+for(var i=0;i<jsonRects.length;i++) {
+  var obj = jsonRects[i];
+  if(data[parseInt(obj.Year)-1960]==null || data[parseInt(obj.Year)-1960]==undefined) {
+    data[parseInt(obj.Year)-1960] = [];
+  } else {
+    if(obj.IndicatorCode==="SP.RUR.TOTL") {
+      if(data[parseInt(obj.Year)-1960][0]==null) {
+        data[parseInt(obj.Year)-1960][0] = {"Year":obj.Year, "Value":parseInt(obj.Value), "Color":"Red", "Region":"Rural"};
+      } else {
+        data[parseInt(obj.Year)-1960][0].Value += parseInt(obj.Value);
+      }
+    }
+    if(obj.IndicatorCode==="SP.URB.TOTL") {
+      if(data[parseInt(obj.Year)-1960][1]==null) {
+        data[parseInt(obj.Year)-1960][1] = {"Year":obj.Year, "Value":parseInt(obj.Value), "Color":"Blue", "Region":"Urban"};
+      } else {
+        data[parseInt(obj.Year)-1960][1].Value += parseInt(obj.Value);
+      }
+    }
+  }
+}
+
+for(var i=0;i<data.length;i++) {
+  data[i][0].Total = parseInt(data[i][0].Value);
+  data[i][1].Total = parseInt(data[i][0].Value) + parseInt(data[i][1].Value);
+}
+
+var rects = [];
+for(var i=0;i<data.length;i++) {
+  for(var j=0;j<data[i].length;j++) {
+    rects.push(data[i][j]);
+  }
+}
+
+stackedbar(rects);
+</script>
+</body>
+</html>
