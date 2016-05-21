@@ -89,8 +89,8 @@ function multiLine(urbanPts, ruralPts) {
 //stack bar 
 
 function stackedbar(rects) {
- var width = 1400,
-      height = 600,
+ var width = 1500,
+      height = 700,
       padding = 250;
   //Create the SVG Viewport selection
   var svgContainer = d3.select("body").append("svg")
